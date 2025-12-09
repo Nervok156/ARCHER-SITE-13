@@ -9,7 +9,6 @@ import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { CustomCursor } from './components/CustomCursor';
 import { ParallaxBackground } from './components/ParallaxBackground';
-import { UBWScrollEffect } from './components/UBWScrollEffect';
 import { FloatingElements } from './components/FloatingElements';
 
 const App: React.FC = () => {
@@ -28,9 +27,6 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-iron-950 text-parchment-200 selection:bg-blood-900 selection:text-white overflow-x-hidden relative">
-      {/* UBW Scroll Effect */}
-      <UBWScrollEffect />
-      
       {/* Floating Elements Effects */}
       <FloatingElements />
       
