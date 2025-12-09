@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ARCHER | UNLIMITED BLADE WORKS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              serif: ['"Crimson Text"', 'serif'],
+              display: ['"Cinzel"', 'serif'],
+            },
+            colors: {
+              'iron-950': '#4a1212',
+              'iron-900': '#5a1a1a',
+              'iron-800': '#6b1f1f',
+              'iron-700': '#7a2525',
+              'blood-600': '#dc2626',
+              'blood-500': '#ef4444',
+              'parchment-100': '#fff5f5',
+              'parchment-200': '#fed7d7',
+              'gold-600': '#ea580c',
+            },
+            backgroundImage: {
+              'grunge': "url('https://www.transparenttextures.com/patterns/black-felt.png')",
+              'paper': "url('https://www.transparenttextures.com/patterns/cream-paper.png')",
+            },
+            animation: {
+              'heat-haze': 'heat 5s infinite linear',
+            },
+            keyframes: {
+              heat: {
+                '0%': { filter: 'hue-rotate(0deg) contrast(1.2)' },
+                '50%': { filter: 'hue-rotate(-10deg) contrast(1.4)' },
+                '100%': { filter: 'hue-rotate(0deg) contrast(1.2)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Base styles */
+      body {
+        background-color: #4a1212;
+        color: #fed7d7;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #5a1a1a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #dc2626;
+        border: 1px solid #7f1d1d;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #ef4444;
+      }
+      
+      .text-shadow {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+      }
+      
+      .text-glow {
+        text-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+      }
+      
+      .torch-flicker {
+        animation: flicker 3s infinite alternate;
+      }
+      
+      @keyframes flicker {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 0.4; }
+      }
+
+      @keyframes floatUp {
+        0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0; }
+        20% { opacity: 0.8; }
+        100% { transform: translateY(-100vh) scale(0) rotate(180deg); opacity: 0; }
+      }
+
+      /* Spark Animation */
+      @keyframes sparkUp {
+        0% {
+          transform: translateY(100vh) translateX(0) scale(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        50% {
+          transform: translateY(50vh) translateX(var(--spark-x, 0)) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-10vh) translateX(calc(var(--spark-x, 0) * 1.5)) scale(0);
+          opacity: 0;
+        }
+      }
+
+      .spark {
+        position: absolute;
+        width: var(--spark-size, 4px);
+        height: var(--spark-size, 4px);
+        border-radius: 50%;
+        filter: blur(2px);
+        animation: sparkUp var(--spark-duration, 4s) infinite linear;
+        animation-delay: var(--spark-delay, 0s);
+        left: var(--spark-left, 50%);
+      }
+
+      .spark-red {
+        background: radial-gradient(circle, #ff4444 0%, #ff0000 40%, #dc2626 70%, transparent 100%);
+        box-shadow: 
+          0 0 10px #ff4444,
+          0 0 20px #ff0000,
+          0 0 30px #dc2626,
+          0 0 40px rgba(255, 68, 68, 0.8),
+          0 0 50px rgba(255, 0, 0, 0.6);
+      }
+
+      .spark-yellow {
+        background: radial-gradient(circle, #ffeb3b 0%, #ffc107 40%, #ff9800 70%, transparent 100%);
+        box-shadow: 
+          0 0 10px #ffeb3b,
+          0 0 20px #ffc107,
+          0 0 30px #ff9800,
+          0 0 40px rgba(255, 235, 59, 0.8),
+          0 0 50px rgba(255, 193, 7, 0.6);
+      }
+
+      /* Medieval Scroll Reveal Animation */
+      .medieval-reveal {
+        opacity: 0;
+        transform: translateY(40px) scale(0.98);
+        filter: blur(4px) sepia(0.5);
+        transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      
+      .medieval-reveal.visible {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0) sepia(0);
+      }
+
+      /* Rotating circle animation */
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .rotating-circle {
+        animation: rotate 60s linear infinite;
+      }
+
+      /* Skill glow animation */
+      @keyframes skill-glow {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+      }
+      
+      .skill-card.ex-rank {
+        animation: skill-glow 2s ease-in-out infinite;
+      }
+
+      /* UBW Scroll Effect Variables */
+      :root {
+        --ubw-intensity: 0;
+        --ubw-primary: #dc2626;
+        --ubw-background: #4a1212;
+      }
+      
+      /* UBW Effects */
+      .ubw-effect {
+        transition: all 0.5s ease;
+      }
+      
+      .ubw-effect:hover {
+        text-shadow: 0 0 calc(10px * var(--ubw-intensity)) var(--ubw-primary);
+        box-shadow: 0 0 calc(20px * var(--ubw-intensity)) rgba(220, 38, 38, 0.3);
+      }
+      
+      /* UBW color shift */
+      @keyframes ubw-color-shift {
+        0% {
+          filter: hue-rotate(0deg) brightness(1);
+        }
+        100% {
+          filter: hue-rotate(-5deg) brightness(1.1);
+        }
+      }
+      
+      /* Floating Elements Effects */
+      .ancient-scroll {
+        position: relative;
+        background: linear-gradient(to right, 
+          rgba(127, 29, 29, 0.1) 0%,
+          rgba(127, 29, 29, 0.05) 20%,
+          transparent 50%,
+          rgba(127, 29, 29, 0.05) 80%,
+          rgba(127, 29, 29, 0.1) 100%
+        );
+        background-size: 200% 100%;
+        animation: scroll-shine 3s ease-in-out infinite;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+      }
+      
+      @keyframes scroll-shine {
+        0%, 100% { background-position: -200% 0; }
+        50% { background-position: 200% 0; }
+      }
+      
+      /* Floating Cards */
+      .floating-card {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transform-style: preserve-3d;
+        will-change: transform;
+      }
+      
+      .floating-card:hover {
+        transform: translateY(-10px) rotateX(5deg) rotateY(-5deg) scale(1.02);
+        box-shadow: 
+          0 20px 40px rgba(127, 29, 29, 0.3),
+          0 0 30px rgba(220, 38, 38, 0.2),
+          inset 0 0 10px rgba(255, 255, 255, 0.1);
+      }
+      
+      /* Animated Borders */
+      .animated-border {
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .animated-border::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, 
+          transparent, 
+          #dc2626, 
+          transparent
+        );
+        animation: border-flow 3s linear infinite;
+      }
+      
+      .animated-border::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: -100%;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, 
+          transparent, 
+          #dc2626, 
+          transparent
+        );
+        animation: border-flow 3s linear infinite reverse;
+      }
+      
+      @keyframes border-flow {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(200%); }
+      }
+      
+      /* Floating Separators */
+      .floating-separator {
+        height: 1px;
+        background: linear-gradient(90deg, 
+          transparent, 
+          rgba(220, 38, 38, 0.3), 
+          rgba(220, 38, 38, 0.6), 
+          rgba(220, 38, 38, 0.3), 
+          transparent
+        );
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .floating-separator::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, 
+          transparent, 
+          rgba(255, 255, 255, 0.2), 
+          transparent
+        );
+        animation: separator-glow 4s ease-in-out infinite;
+      }
+      
+      @keyframes separator-glow {
+        0%, 100% { transform: translateX(-100%); }
+        50% { transform: translateX(200%); }
+      }
+      
+      /* Glowing Text */
+      .glowing-text {
+        text-shadow: 
+          0 0 5px currentColor,
+          0 0 10px currentColor,
+          0 0 15px currentColor;
+        animation: text-glow 2s ease-in-out infinite alternate;
+      }
+      
+      @keyframes text-glow {
+        from {
+          text-shadow: 
+            0 0 5px currentColor,
+            0 0 10px currentColor,
+            0 0 15px currentColor;
+        }
+        to {
+          text-shadow: 
+            0 0 10px currentColor,
+            0 0 20px currentColor,
+            0 0 30px currentColor;
+        }
+      }
+      
+      /* Floating Animation for Sections */
+      @keyframes float-section {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      
+      .floating-section {
+        animation: float-section 6s ease-in-out infinite;
+      }
+      
+      /* Ripple Effect */
+      .ripple {
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .ripple::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(220, 38, 38, 0.3);
+        transform: translate(-50%, -50%);
+        opacity: 0;
+      }
+      
+      .ripple:hover::after {
+        animation: ripple-effect 0.6s ease-out;
+      }
+      
+      @keyframes ripple-effect {
+        0% {
+          width: 0;
+          height: 0;
+          opacity: 1;
+        }
+        100% {
+          width: 300px;
+          height: 300px;
+          opacity: 0;
+        }
+      }
+
+      /* Magical circle rotation */
+      @keyframes magical-circle {
+        0% {
+          transform: rotate(0deg) scale(1);
+          opacity: 0.3;
+        }
+        50% {
+          transform: rotate(180deg) scale(1.1);
+          opacity: 0.5;
+        }
+        100% {
+          transform: rotate(360deg) scale(1);
+          opacity: 0.3;
+        }
+      }
+
+      /* Particle Effect */
+      @keyframes particle-float {
+        0% {
+          transform: translate(0, 0) scale(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        100% {
+          transform: translate(
+            calc(var(--particle-x, 0) * 100px),
+            calc(var(--particle-y, -100) * 1px)
+          ) scale(1);
+          opacity: 0;
+        }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.2.0/client",
+    "react-dom": "https://aistudiocdn.com/react-dom@^19.2.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "recharts": "https://aistudiocdn.com/recharts@^3.5.1",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
